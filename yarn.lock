@@ -2503,9 +2503,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xmtp-ai-docs-bot@workspace:.":
+"xmtp-generalstore-bot@workspace:.":
   version: 0.0.0-use.local
-  resolution: "xmtp-ai-docs-bot@workspace:."
+  resolution: "xmtp-generalstore-bot@workspace:."
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     "@xmtp/grpc-api-client": "npm:^0.2.4"
