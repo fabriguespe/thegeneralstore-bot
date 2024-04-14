@@ -18,6 +18,11 @@ run(async (context: HandlerContext) => {
   // get the current step we're in
   const step = inMemoryCache.get(senderAddress);
 
+  // check if the message is an unsubscribe message
+  if (content?.toLowerCase() === "stop") {
+    inMemoryCache.delete(senderAddress); // Reset the step for future interactions
+    return;
+  }
   if (!step) {
     // send the first message
     await context.reply(
