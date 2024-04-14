@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { Wallet } from "ethers";
-import HandlerContext from "./handler-context";
-import run from "./runner.js";
+import HandlerContext from "./lib/handler-context";
+import run from "./lib/runner.js";
 const inMemoryCache = new Map<string, number>();
 
 run(async (context: HandlerContext) => {
