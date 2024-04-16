@@ -1,20 +1,26 @@
 import "dotenv/config";
 import HandlerContext from "./lib/handler-context";
 import run from "./lib/runner.js";
-const inMemoryCache = new Map<string, number>();
+import { updateCacheForSender } from "./lib/cache.js";
+
+const inMemoryCache = new Map<
+  string,
+  { step: number; lastInteraction: number }
+>();
 
 run(async (context: HandlerContext) => {
   const { message } = context;
 
   const { content, senderAddress } = message;
 
-  // get the current step we're in
-  const step = inMemoryCache.get(senderAddress);
+  // Update or reset the cache entry for this sender
+  const { step, reset } = updateCacheForSender(
+    inMemoryCache,
+    senderAddress,
+    content,
+    ["stop", "unsubscribe", "cancel"]
+  );
 
-  // check if the message is an unsubscribe message
-  if (content?.toLowerCase() === "stop") {
-    inMemoryCache.set(senderAddress, 0);
-  }
   if (!step) {
     // send the first message
     await context.reply(
@@ -25,7 +31,7 @@ run(async (context: HandlerContext) => {
       "Below is our menu. Let us know the number of the item you want, and it's yours. If it's a digital good, our bot will deliver those items right to your wallet.\n\nMenu:\n1. Chewing Gum\n2. TicTacs\n3. Chapstick\n4. RedBull\n5. Iced Coffee\n\n✍️ (reply with the number of the item you want)"
     );
 
-    inMemoryCache.set(senderAddress, 1);
+    inMemoryCache.set(senderAddress, { step: 1, lastInteraction: Date.now() });
   } else if (step === 1) {
     const validOptions = ["1", "2", "3", "4", "5"];
     if (!validOptions.includes(content)) {
@@ -50,5 +56,3 @@ run(async (context: HandlerContext) => {
     inMemoryCache.delete(senderAddress); // Reset the step for future interactions
   }
 });
-
-// The cron job sections remain unchanged
