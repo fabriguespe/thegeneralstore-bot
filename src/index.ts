@@ -13,8 +13,7 @@ run(async (context: HandlerContext) => {
 
   // check if the message is an unsubscribe message
   if (content?.toLowerCase() === "stop") {
-    inMemoryCache.delete(senderAddress); // Reset the step for future interactions
-    return;
+    inMemoryCache.delete(senderAddress);
   }
   if (!step) {
     // send the first message
