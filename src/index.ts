@@ -31,7 +31,7 @@ run(async (context: HandlerContext) => {
     const validOptions = ["1", "2", "3", "4", "5"];
     if (!validOptions.includes(content)) {
       await context.reply(
-        "Invalid option selected. Please enter a valid option (1, 2, 3, 4, or 5)"
+        "Invalid option selected. Please enter a valid option (1, 2, 3, 4, or 5)\n\nIf you'd like to restart the bot, you can do so at any time by saying 'stop'."
       );
       return;
     }
