@@ -14,12 +14,9 @@ run(async (context: HandlerContext) => {
   const { content, senderAddress } = message;
 
   // Update or reset the cache entry for this sender
-  const { step, reset } = updateCacheForSender(
-    inMemoryCache,
-    senderAddress,
-    content,
-    ["stop", "unsubscribe", "cancel"]
-  );
+  const step = updateCacheForSender(inMemoryCache, senderAddress, content, [
+    "list",
+  ]);
 
   if (!step) {
     // send the first message
