@@ -35,8 +35,4 @@ yarn start
 # to run with hot-reload
 yarn build:watch
 yarn start:watch
-
-# run the echo example
-yarn build:watch
-yarn start:echo
 ```
