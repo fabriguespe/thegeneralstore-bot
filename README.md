@@ -1,4 +1,4 @@
-# The General Store Bot
+# The General Store Bot 🛒
 
 > 💬 **Try it:** Message `store.hi.xmtp.eth`
 
