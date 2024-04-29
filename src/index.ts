@@ -28,6 +28,10 @@ run(async (context: HandlerContext) => {
       "Below is our menu. Let us know the number of the item you want, and it's yours. If it's a digital good, our bot will deliver those items right to your wallet.\n\nMenu:\n1. Chewing Gum\n2. TicTacs\n3. Chapstick\n4. RedBull\n5. Iced Coffee\n\n✍️ (reply with the number of the item you want)"
     );
 
+    await context.reply(
+      "Want faucets? Head to 💧 faucetbot.eth : Delivers Faucet funds to devs on Testnet. Powered by Learnweb3!"
+    );
+
     inMemoryCacheStep.set(senderAddress, 1);
   } else if (cacheStep === 1) {
     const validOptions = ["1", "2", "3", "4", "5"];
