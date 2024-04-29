@@ -1,6 +1,6 @@
-# The General Store Bot 🛒
+# TheGeneralStore Bot 🛍️
 
-> 💬 **Try it:** Message `store.hi.xmtp.eth`
+> 💬 **Try it:** Message `thegeneralstore.eth`
 
 Go to [BotKit](https://github.com/fabriguespe/botkit) to learn more
 
