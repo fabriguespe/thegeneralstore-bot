@@ -1,6 +1,9 @@
 import "dotenv/config";
 import { run, HandlerContext } from "@xmtp/botkit";
 
+import Mixpanel from "mixpanel";
+const mixpanel = Mixpanel.init(process.env.MIX_PANEL as string);
+
 //Tracks conversation steps
 const inMemoryCacheStep = new Map<string, number>();
 
@@ -11,6 +14,9 @@ run(async (context: HandlerContext) => {
   const { content, senderAddress } = context.message;
   const lowerContent = content.toLowerCase();
 
+  mixpanel.track("TheGeneralStore-Visit", {
+    distinct_id: senderAddress,
+  });
   //Handles unsubscribe and resets step
   if (stopWords.some((word) => lowerContent.includes(word))) {
     inMemoryCacheStep.set(senderAddress, 0);
@@ -41,6 +47,10 @@ run(async (context: HandlerContext) => {
       );
       return;
     }
+
+    mixpanel.track("TheGeneralStore-Order", {
+      distinct_id: senderAddress,
+    });
 
     await context.reply(
       "Your order was successfully placed. Thank you for shopping with us!"
