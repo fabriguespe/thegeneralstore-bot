@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { run, HandlerContext } from "@xmtp/botkit";
 
 //Tracks conversation steps
