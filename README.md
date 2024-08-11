@@ -40,4 +40,8 @@ Test the bots in messaging apps
 
 ## Documentation 📚
 
-To learn more about Botkit, to go the [docs](https://github.com/xmtp/botkit)
+To learn more about MessageKit, to go the [docs](https://message-kit.vercel.app)
+
+---
+
+Made with ❤️ by [Ephemera](https://ephemerahq.com)

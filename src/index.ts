@@ -20,7 +20,7 @@ run(async (context: HandlerContext) => {
   if (cacheStep === 0) {
     // send the first message
     await context.reply(
-      "Welcome to the Eth CC General Store powered by ENS + XMTP, where web3 builders can get supplies, anytime, day or night."
+      "Welcome to The General Store powered by ENS + XMTP, where web3 builders can get supplies, anytime, day or night."
     );
     // send the second message
     await context.reply(
@@ -28,7 +28,7 @@ run(async (context: HandlerContext) => {
     );
 
     await context.reply(
-      "Want faucets? Head to 💧 faucetbot.eth : Delivers Faucet funds to devs on Testnet. Powered by Learnweb3!"
+      "Want faucets? Head to faucetbot.eth : Delivers Faucet funds to devs on Testnet"
     );
 
     inMemoryCacheStep.set(senderAddress, 1);
