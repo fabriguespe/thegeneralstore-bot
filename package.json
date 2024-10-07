@@ -13,7 +13,9 @@
     "typescript": "^5.4.3"
   },
   "dependencies": {
-    "@xmtp/message-kit": "^0.0.9"
+    "@notionhq/client": "^2.2.15",
+    "@xmtp/message-kit": "^1.0.0-beta.2",
+    "openai": "^4.67.2"
   },
   "engines": {
     "node": ">=20"

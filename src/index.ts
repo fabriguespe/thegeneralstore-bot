@@ -1,4 +1,5 @@
 import { run, HandlerContext } from "@xmtp/message-kit";
+import { handler as agent } from "./handlers/agent.js";
 
 //Tracks conversation steps
 const inMemoryCacheStep = new Map<string, number>();
@@ -7,17 +8,22 @@ const inMemoryCacheStep = new Map<string, number>();
 const stopWords = ["stop", "unsubscribe", "cancel", "list"];
 
 run(async (context: HandlerContext) => {
-  const { content, sender } = context.message;
-  const { content: text } = content;
+  const {
+    typeId,
+    content: { content: text },
+    sender,
+  } = context.message;
 
   const senderAddress = sender.address;
   //Handles unsubscribe and resets step
   if (stopWords.some((word) => text.toLowerCase().includes(word))) {
     inMemoryCacheStep.set(senderAddress, 0);
   }
-
+  if (typeId === "text") {
+    await agent(context);
+    return;
+  }
   const cacheStep = inMemoryCacheStep.get(senderAddress) || 0;
-
   if (cacheStep === 0) {
     // send the first message
     await context.send(
