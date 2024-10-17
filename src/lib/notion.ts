@@ -3,6 +3,7 @@ import { Client } from "@notionhq/client";
 const notion = new Client({
   auth: process.env.NOTION_API_KEY,
 });
+const poapsID = process.env.NOTION_POAP_DB;
 const pageId = process.env.NOTION_PAGE_ID;
 
 export async function updateDB() {
@@ -54,65 +55,32 @@ export async function downloadPage() {
     .join("\n\n");
   return markdown;
 }
+export async function downloadPoapTable() {
+  const response = await notion.databases.query({
+    database_id: poapsID as string,
+  });
 
-export async function createDB() {
-  /*
-  const page = await notion.pages.create({
-    parent: {
-      database_id: pageId as string,
-    },
+  const poapTable = response.results.map((page: any) => {
+    const url = page.properties.Url.url;
+    const address = page.properties.Address.title[0]?.plain_text;
+    const id = page.id;
+    return { url, address, id };
+  });
+  return poapTable as { url: string; address: string; id: string }[];
+}
+export async function updatePoapAddress(dbRowId: string, address: string) {
+  await notion.pages.update({
+    page_id: dbRowId as string,
     properties: {
-      Name: {
+      Address: {
         type: "title",
         title: [
           {
             type: "text",
-            text: { content: user.name as string },
-          },
-        ],
-      },
-      Company: {
-        type: "rich_text",
-        rich_text: [
-          {
-            type: "text",
-            text: { content: user.company as string },
-          },
-        ],
-      },
-      Role: {
-        type: "rich_text",
-        rich_text: [
-          {
-            type: "text",
-            text: { content: user.role as string },
-          },
-        ],
-      },
-      Preference: {
-        type: "rich_text",
-        rich_text: [
-          {
-            type: "text",
-            text: { content: user.preference as string },
-          },
-        ],
-      },
-      Status: {
-        type: "select",
-        select: {
-          name: "Waitlist",
-        },
-      },
-      Address: {
-        type: "rich_text",
-        rich_text: [
-          {
-            type: "text",
-            text: { content: sender.address as string },
+            text: { content: address },
           },
         ],
       },
     },
-  });*/
+  });
 }
