@@ -41,13 +41,11 @@ export async function handler(context: HandlerContext) {
         const response = await context.intent(message);
 
         //Add the response to the chat history
-        if (message === "/networks" && response && response.message) {
+        if (response && response.message) {
           chatHistories[sender.address].push({
             role: "system",
             content: response.message,
           });
-        }
-        if (response && response.message) {
           await context.send(response.message);
         }
       } else {
@@ -61,11 +59,11 @@ export async function handler(context: HandlerContext) {
 }
 
 async function getSystemPrompt(sender: string) {
-  //const page = await downloadPage();
-  let page = fs.readFileSync(
-    path.resolve(__dirname, "../../src/prompt.md"),
-    "utf8"
-  );
+  let page = await downloadPage();
+  // let page = fs.readFileSync(
+  //   path.resolve(__dirname, "../../src/prompt.md"),
+  //   "utf8"
+  // );
   page = page.replace("{ADDRESS}", sender);
   page = page.replace("{NETWORKS}", SUPPORTED_NETWORKS.join(", "));
 
