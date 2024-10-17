@@ -20,6 +20,7 @@ export async function updateDB() {
   });
 }
 export async function downloadPage() {
+  console.log("downloadPage", pageId);
   const blocks = await notion.blocks.children.list({
     block_id: pageId as string,
   });
@@ -47,7 +48,6 @@ export async function downloadPage() {
             .map((text: any) => text.plain_text)
             .join("")}`;
         // Add more cases for other block types as needed
-
         default:
           return "";
       }

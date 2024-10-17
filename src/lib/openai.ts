@@ -37,7 +37,8 @@ export async function textGeneration(
       ?.replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$2")
       ?.replace(/^#+\s*(.*)$/gm, "$1")
       ?.replace(/`([^`]+)`/g, "$1")
-      ?.replace(/^`|`$/g, "");
+      ?.replace(/^`|`$/g, "")
+      ?.trim();
 
     return { reply: cleanedReply as string, history: messages };
   } catch (error) {

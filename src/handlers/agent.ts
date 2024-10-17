@@ -38,13 +38,21 @@ export async function handler(context: HandlerContext) {
     for (const message of messages) {
       if (message.startsWith("/")) {
         const response = await context.intent(message);
-
         //Add the response to the chat history
-        if (message === "/networks" && response && response.message) {
+        if (response && response.message) {
+          let msg = response?.message
+            ?.replace(/(\*\*|__)(.*?)\1/g, "$2")
+            ?.replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$2")
+            ?.replace(/^#+\s*(.*)$/gm, "$1")
+            ?.replace(/`([^`]+)`/g, "$1")
+            ?.replace(/^`|`$/g, "")
+            ?.trim();
+
           chatHistories[sender.address].push({
             role: "system",
-            content: response.message,
+            content: msg,
           });
+
           await context.send(response.message);
         }
       } else {
@@ -65,6 +73,6 @@ async function getSystemPrompt(sender: string) {
 
   page = page.replace("{ADDRESS}", sender);
   page = page.replace("{NETWORKS}", SUPPORTED_NETWORKS.join(", "));
-
+  console.log("page", page);
   return page;
 }
