@@ -34,11 +34,12 @@ export async function handler(context: HandlerContext) {
     const messages = reply
       .split("\n")
       .filter((message) => message.trim() !== "");
-
+    console.log("messages", messages);
     for (const message of messages) {
       if (message.startsWith("/")) {
         const response = await context.intent(message);
         //Add the response to the chat history
+        console.log("response", response);
         if (response && response.message) {
           let msg = response?.message
             ?.replace(/(\*\*|__)(.*?)\1/g, "$2")
