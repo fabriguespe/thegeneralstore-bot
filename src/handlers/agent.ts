@@ -67,9 +67,10 @@ export async function handler(context: HandlerContext) {
 
 async function getSystemPrompt(sender: string) {
   let page =
-    process.env.NODE_ENV === "production"
-      ? await downloadPage()
-      : fs.readFileSync(path.resolve(__dirname, "../../src/prompt.md"), "utf8");
+    //process.env.NODE_ENV === "production"
+    // ? await downloadPage()*/
+    //:
+    fs.readFileSync(path.resolve(__dirname, "../../src/prompt.md"), "utf8");
 
   page = page.replace("{ADDRESS}", sender);
   page = page.replace("{NETWORKS}", SUPPORTED_NETWORKS.join(", "));
