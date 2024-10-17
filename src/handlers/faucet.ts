@@ -60,8 +60,11 @@ export async function handleFaucet(context: HandlerContext) {
         .replace(/_/g, " ")
         .replace(/\b\w/g, (l) => l.toUpperCase())}`;
     });
-
-    await context.send(`Available networks:\n\n${networkList.join("\n")}`);
+    return {
+      message: `Available networks:\n\n${networkList.join("\n")}`,
+      code: 200,
+    };
+    // await context.send(`Available networks:\n\n${networkList.join("\n")}`);
   } else if (command === "faucet") {
     const { network } = params;
     console.log("network", network);

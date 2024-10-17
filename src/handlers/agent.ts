@@ -39,7 +39,17 @@ export async function handler(context: HandlerContext) {
     for (const message of messages) {
       if (message.startsWith("/")) {
         const response = await context.intent(message);
-        if (response && response.message) await context.send(response.message);
+
+        //Add the response to the chat history
+        if (message === "/networks" && response && response.message) {
+          chatHistories[sender.address].push({
+            role: "system",
+            content: response.message,
+          });
+        }
+        if (response && response.message) {
+          await context.send(response.message);
+        }
       } else {
         await context.send(message);
       }
