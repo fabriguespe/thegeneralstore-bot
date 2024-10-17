@@ -64,18 +64,14 @@ export async function handleFaucet(context: HandlerContext) {
       message: `Available networks:\n\n${networkList.join("\n")}`,
       code: 200,
     };
-    // await context.send(`Available networks:\n\n${networkList.join("\n")}`);
   } else if (command === "faucet") {
     const { network } = params;
-    console.log("network", network);
     const selectedNetwork = supportedNetworks.find(
       (n) => n.networkId === network
     );
 
     if (!selectedNetwork) {
-      await context.send(
-        "Invalid network index. Please select a valid option."
-      );
+      await context.send("Invalid network. Please select a valid option.");
       return;
     }
 

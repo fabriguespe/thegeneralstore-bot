@@ -31,7 +31,6 @@ export async function handler(context: HandlerContext) {
     );
 
     if (!group) chatHistories[sender.address] = history;
-    console.log("reply", chatHistories[sender.address]);
     const messages = reply
       .split("\n")
       .filter((message) => message.trim() !== "");
@@ -41,7 +40,7 @@ export async function handler(context: HandlerContext) {
         const response = await context.intent(message);
 
         //Add the response to the chat history
-        if (response && response.message) {
+        if (message === "/networks" && response && response.message) {
           chatHistories[sender.address].push({
             role: "system",
             content: response.message,
@@ -54,16 +53,16 @@ export async function handler(context: HandlerContext) {
     }
   } catch (error) {
     console.error("Error during OpenAI call:", error);
-    await context.reply("An error occurred while processing your request.");
+    await context.send("An error occurred while processing your request.");
   }
 }
 
 async function getSystemPrompt(sender: string) {
-  let page = await downloadPage();
-  // let page = fs.readFileSync(
-  //   path.resolve(__dirname, "../../src/prompt.md"),
-  //   "utf8"
-  // );
+  let page =
+    process.env.NODE_ENV === "production"
+      ? await downloadPage()
+      : fs.readFileSync(path.resolve(__dirname, "../../src/prompt.md"), "utf8");
+
   page = page.replace("{ADDRESS}", sender);
   page = page.replace("{NETWORKS}", SUPPORTED_NETWORKS.join(", "));
 
