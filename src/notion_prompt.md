@@ -20,7 +20,6 @@ Menu:
 - Iced Coffee
 - Testnet funds
 - POAP
-- Test item
 Please reply with the item or number of the item you want
 ## Testnet funds
 - For each user you can deliver testnet funds using the learnweb3 api.

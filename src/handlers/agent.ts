@@ -66,17 +66,10 @@ export async function handler(context: HandlerContext) {
 }
 
 async function getSystemPrompt(sender: string) {
-  let page = fs.readFileSync(
-    path.resolve(__dirname, "../../src/prompt.md"),
+  let page = await fs.readFileSync(
+    path.resolve(__dirname, "../../src/notion_prompt.md"),
     "utf8"
   );
-  if (fs.existsSync(path.resolve(__dirname, "../../src/notion_prompt.md"))) {
-    console.log("Using Notion prompt");
-    page = fs.readFileSync(
-      path.resolve(__dirname, "../../src/notion_prompt.md"),
-      "utf8"
-    );
-  }
   page = page.replace("{ADDRESS}", sender);
   page = page.replace("{NETWORKS}", SUPPORTED_NETWORKS.join(", "));
   //console.log("page", page);
