@@ -30,15 +30,23 @@ export async function handler(context: HandlerContext) {
     );
 
     if (!group) chatHistories[sender.address] = history;
-    const messages = reply
-      .split("\n")
-      .filter((message) => message.trim() !== "");
-    console.log("messages", messages);
+
+    const messages = reply.split("\n").filter((message) =>
+      message
+        ?.replace(/(\*\*|__)(.*?)\1/g, "$2")
+        ?.replace(/\[([^\]]+)\]\(([^)]+)\)/g, "$2")
+        ?.replace(/^#+\s*(.*)$/gm, "$1")
+        ?.replace(/`([^`]+)`/g, "$1")
+        ?.replace(/^`|`$/g, "")
+        ?.trim()
+    );
+    console.log("messages", reply, messages);
     for (const message of messages) {
       if (message.startsWith("/")) {
         const response = await context.intent(message);
         //Add the response to the chat history
         console.log("response", response);
+
         if (response && response.message) {
           let msg = response?.message
             ?.replace(/(\*\*|__)(.*?)\1/g, "$2")
