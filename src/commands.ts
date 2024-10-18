@@ -1,6 +1,7 @@
 import type { CommandGroup } from "@xmtp/message-kit";
 import { handlePoap } from "./handlers/poap.js";
 import { handleFaucet } from "./handlers/faucet.js";
+import { handleNotion } from "./handlers/notion.js";
 
 export const commands: CommandGroup[] = [
   {
@@ -42,6 +43,19 @@ export const commands: CommandGroup[] = [
         command: "/networks",
         handler: handleFaucet,
         description: "Get the list of supported networks.",
+        params: {},
+      },
+    ],
+  },
+  {
+    name: "Notion",
+    description: "Update your Notion prompt.",
+    triggers: ["/update"],
+    commands: [
+      {
+        command: "/update",
+        handler: handleNotion,
+        description: "Update your Notion prompt.",
         params: {},
       },
     ],

@@ -7,7 +7,7 @@ export async function handlePoap(context: HandlerContext) {
       content: { command, params },
     },
   } = context;
-
+  console.log("Poap command", command);
   if (command == "poap") {
     // Destructure and validate parameters for the ens command
     const { address } = params;

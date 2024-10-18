@@ -4,7 +4,6 @@ import fs from "fs";
 import { SUPPORTED_NETWORKS } from "../lib/learnweb3.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import { downloadPage } from "../lib/notion.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -67,14 +66,23 @@ export async function handler(context: HandlerContext) {
 }
 
 async function getSystemPrompt(sender: string) {
-  let page =
-    //process.env.NODE_ENV === "production"
-    // ? await downloadPage()*/
-    //:
-    fs.readFileSync(path.resolve(__dirname, "../../src/prompt.md"), "utf8");
-
+  let page = fs.readFileSync(
+    path.resolve(__dirname, "../../src/prompt.md"),
+    "utf8"
+  );
+  if (fs.existsSync(path.resolve(__dirname, "../../src/notion_prompt.md"))) {
+    console.log("Using Notion prompt");
+    page = fs.readFileSync(
+      path.resolve(__dirname, "../../src/notion_prompt.md"),
+      "utf8"
+    );
+  }
   page = page.replace("{ADDRESS}", sender);
   page = page.replace("{NETWORKS}", SUPPORTED_NETWORKS.join(", "));
   //console.log("page", page);
   return page;
+}
+
+export async function clearChatHistory(sender: string) {
+  chatHistories[sender] = [];
 }

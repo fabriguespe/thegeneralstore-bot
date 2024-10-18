@@ -52,7 +52,7 @@ export async function downloadPage() {
           return "";
       }
     })
-    .join("\n\n");
+    .join("\n");
   return markdown;
 }
 export async function downloadPoapTable() {
