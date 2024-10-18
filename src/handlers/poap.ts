@@ -1,10 +1,12 @@
 import { HandlerContext } from "@xmtp/message-kit";
 import { downloadPoapTable, updatePoapAddress } from "../lib/notion.js";
+import { clearChatHistory } from "./agent.js";
 
 export async function handlePoap(context: HandlerContext) {
   const {
     message: {
       content: { command, params },
+      sender,
     },
   } = context;
   console.log("Poap command", command);
@@ -26,6 +28,8 @@ export async function handlePoap(context: HandlerContext) {
       let randomPoap = poapTable[Math.floor(Math.random() * poapTable.length)];
       await updatePoapAddress(randomPoap?.id, address);
       await context.send(`This is your POAP: ${randomPoap?.url}`);
+      // Clear any in-memory cache or state related to the prompt
+      clearChatHistory(sender.address);
     }
   }
 }

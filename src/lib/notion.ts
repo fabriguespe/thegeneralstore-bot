@@ -20,7 +20,6 @@ export async function updateDB() {
   });
 }
 export async function downloadPage() {
-  console.log("downloadPage", pageId);
   const blocks = await notion.blocks.children.list({
     block_id: pageId as string,
   });

@@ -12,7 +12,6 @@ export async function handleNotion(context: HandlerContext) {
   } = context;
 
   if (command === "update") {
-    console.log("Updating Notion DB");
     const page = await downloadPage();
     fs.writeFileSync("src/notion_prompt.md", page);
 

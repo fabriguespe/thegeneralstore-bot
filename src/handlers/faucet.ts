@@ -2,7 +2,7 @@ import { HandlerContext } from "@xmtp/message-kit";
 import { getRedisClient } from "../lib/redis.js";
 import { RedisClientType } from "@redis/client";
 import { FIVE_MINUTES, LearnWeb3Client, Network } from "../lib/learnweb3.js";
-
+import { clearChatHistory } from "./agent.js";
 const redisClient: RedisClientType = await getRedisClient();
 
 export async function handleFaucet(context: HandlerContext) {
@@ -60,6 +60,7 @@ export async function handleFaucet(context: HandlerContext) {
         .replace(/_/g, " ")
         .replace(/\b\w/g, (l) => l.toUpperCase())}`;
     });
+
     return {
       message: `Available networks:\n\n${networkList.join("\n")}`,
       code: 200,
@@ -88,6 +89,8 @@ export async function handleFaucet(context: HandlerContext) {
       await context.send(
         `❌ Sorry, there was an error processing your request:\n\n"${result.error!}"`
       );
+      // Clear any in-memory cache or state related to the prompt
+      clearChatHistory(sender.address);
       return;
     }
 
@@ -102,6 +105,8 @@ export async function handleFaucet(context: HandlerContext) {
         selectedNetwork?.dripAmount
       }`
     );
+    // Clear any in-memory cache or state related to the prompt
+    clearChatHistory(sender.address);
   } else {
     await context.send("Unknown command. Please use 'list' or 'drip'.");
   }
