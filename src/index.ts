@@ -2,6 +2,7 @@ import { run, HandlerContext } from "@xmtp/message-kit";
 import { handler as agent } from "./handlers/agent.js";
 import { handleNotion } from "./handlers/notion.js";
 import { downloadPage } from "./lib/notion.js";
+import { handlePoap } from "./handlers/poap.js";
 import fs from "fs";
 
 setupFiles();
@@ -12,8 +13,12 @@ run(async (context: HandlerContext) => {
   } = context.message;
 
   if (typeId === "text") {
+    console.log(text);
     if (text.startsWith("/update")) {
       await handleNotion(context);
+      return;
+    } else if (text.startsWith("/poap list")) {
+      await handlePoap(context);
       return;
     } else await agent(context);
   }

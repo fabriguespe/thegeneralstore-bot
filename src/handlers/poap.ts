@@ -6,11 +6,18 @@ await db.read();
 export async function handlePoap(context: HandlerContext) {
   const {
     message: {
-      content: { command, params },
+      content: { content: text, command, params },
       sender,
     },
   } = context;
-  if (command == "poap") {
+
+  if (command == "poap" && text == "/poap list") {
+    const poapTable = db?.data?.poaps;
+    const claimed = poapTable.filter((poap) => poap.Address);
+    await context.send(
+      `You have claimed ${claimed.length} POAPs out of ${poapTable.length}`
+    );
+  } else if (command == "poap") {
     // Destructure and validate parameters for the ens command
     const { address } = params;
 

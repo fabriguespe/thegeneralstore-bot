@@ -19,6 +19,12 @@ export const commands: CommandGroup[] = [
           },
         },
       },
+      {
+        command: "/poap list",
+        handler: handlePoap,
+        description: "List all POAPs.",
+        params: {},
+      },
     ],
   },
   {
