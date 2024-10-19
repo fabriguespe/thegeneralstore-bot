@@ -46,6 +46,10 @@ export async function downloadPage() {
           return `- ${block.bulleted_list_item.rich_text
             .map((text: any) => text.plain_text)
             .join("")}`;
+        case "numbered_list_item":
+          return `- ${block.numbered_list_item.rich_text
+            .map((text: any) => text.plain_text)
+            .join("")}`;
         // Add more cases for other block types as needed
         default:
           return "";

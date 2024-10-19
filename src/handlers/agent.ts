@@ -80,7 +80,6 @@ async function getSystemPrompt(sender: string) {
   );
   page = page.replace("{ADDRESS}", sender);
   page = page.replace("{NETWORKS}", SUPPORTED_NETWORKS.join(", "));
-  //console.log("page", page);
   return page;
 }
 
