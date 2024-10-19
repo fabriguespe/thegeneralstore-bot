@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const chatHistories: Record<string, any[]> = {};
+let chatHistories: Record<string, any[]> = {};
 
 export async function handler(context: HandlerContext) {
   if (!process?.env?.OPEN_AI_API_KEY) {
@@ -45,7 +45,7 @@ export async function handler(context: HandlerContext) {
       if (message.startsWith("/")) {
         const response = await context.intent(message);
         //Add the response to the chat history
-        console.log("response", response);
+        //console.log("response", response);
 
         if (response && response.message) {
           let msg = response?.message
@@ -75,7 +75,7 @@ export async function handler(context: HandlerContext) {
 
 async function getSystemPrompt(sender: string) {
   let page = await fs.readFileSync(
-    path.resolve(__dirname, "../../src/notion_prompt.md"),
+    path.resolve(__dirname, "../../src/data/notion_prompt.md"),
     "utf8"
   );
   page = page.replace("{ADDRESS}", sender);
@@ -83,6 +83,6 @@ async function getSystemPrompt(sender: string) {
   return page;
 }
 
-export async function clearChatHistory(sender: string) {
-  chatHistories[sender] = [];
+export async function clearChatHistory() {
+  chatHistories = {};
 }

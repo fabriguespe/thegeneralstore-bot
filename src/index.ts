@@ -5,7 +5,7 @@ import { downloadPage } from "./lib/notion.js";
 import fs from "fs";
 
 const page = await downloadPage();
-fs.writeFileSync("src/notion_prompt.md", page);
+fs.writeFileSync("src/data/notion_prompt.md", page);
 console.log("Notion DB updated");
 
 run(async (context: HandlerContext) => {

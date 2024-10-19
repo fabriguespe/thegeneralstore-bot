@@ -1,6 +1,7 @@
 import { HandlerContext } from "@xmtp/message-kit";
-import { downloadPoapTable, updatePoapAddress } from "../lib/notion.js";
 import { clearChatHistory } from "./agent.js";
+import { db } from "../lib/db.js";
+await db.read();
 
 export async function handlePoap(context: HandlerContext) {
   const {
@@ -19,16 +20,22 @@ export async function handlePoap(context: HandlerContext) {
       );
       return;
     }
-    const poapTable = await downloadPoapTable();
-    const poap = poapTable.find((poap: any) => poap.address === address);
-    if (poap?.url) {
-      await context.send(`This poap has already been delivered: ${poap.url}`);
+    await db.read();
+    const poapTable = db?.data?.poaps;
+    const poap = poapTable.find((poap) => poap.Address == address);
+    console.log(poap);
+    if (!poap) {
+      const emptyPoap = poapTable.find((poap) => !poap.Address);
+      if (emptyPoap) {
+        db?.data?.poaps?.push({ URL: emptyPoap?.URL, Address: address });
+        await context.send(`Here is your POAP ${emptyPoap?.URL}`);
+        await db.write();
+      } else {
+        await context.send("No more POAPs available");
+      }
     } else {
-      let randomPoap = poapTable[Math.floor(Math.random() * poapTable.length)];
-      await updatePoapAddress(randomPoap?.id, address);
-      await context.send(`This is your POAP: ${randomPoap?.url}`);
-      // Clear any in-memory cache or state related to the prompt
-      clearChatHistory(sender.address);
+      await context.send(`You have already claimed this POAP ${poap?.URL}`);
     }
+    //clearChatHistory();
   }
 }

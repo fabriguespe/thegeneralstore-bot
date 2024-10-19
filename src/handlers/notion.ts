@@ -13,10 +13,10 @@ export async function handleNotion(context: HandlerContext) {
 
   if (command === "update") {
     const page = await downloadPage();
-    fs.writeFileSync("src/notion_prompt.md", page);
+    fs.writeFileSync("src/data/notion_prompt.md", page);
 
     // Clear any in-memory cache or state related to the prompt
-    clearChatHistory(sender.address);
+    clearChatHistory();
 
     await context.reply("Notion DB updated");
   }
