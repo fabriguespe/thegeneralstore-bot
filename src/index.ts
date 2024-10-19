@@ -4,10 +4,7 @@ import { handleNotion } from "./handlers/notion.js";
 import { downloadPage } from "./lib/notion.js";
 import fs from "fs";
 
-const page = await downloadPage();
-fs.writeFileSync("src/data/notion_prompt.md", page);
-console.log("Notion DB updated");
-
+setupFiles();
 run(async (context: HandlerContext) => {
   const {
     typeId,
@@ -21,3 +18,15 @@ run(async (context: HandlerContext) => {
     } else await agent(context);
   }
 });
+
+async function setupFiles() {
+  if (!fs.existsSync(".data/db.json")) {
+    const dbfile = fs.readFileSync("src/data/db.json", "utf8");
+    fs.writeFileSync(".data/db.json", dbfile);
+    console.log("DB file created");
+  }
+
+  const page = await downloadPage();
+  fs.writeFileSync("src/data/notion_prompt.md", page);
+  console.log("Notion DB updated");
+}
