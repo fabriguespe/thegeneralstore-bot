@@ -7,11 +7,11 @@ export const commands: CommandGroup[] = [
   {
     name: "Poap Bot",
     description: "Get your POAP.",
-    triggers: ["/poap"],
     commands: [
       {
         command: "/poap [address]",
         handler: handlePoap,
+        triggers: ["/poap"],
         description: "Get your POAP.",
         params: {
           address: {
@@ -22,6 +22,7 @@ export const commands: CommandGroup[] = [
       {
         command: "/poap list",
         handler: handlePoap,
+        triggers: ["/poap list"],
         description: "List all POAPs.",
         params: {},
       },
@@ -30,11 +31,11 @@ export const commands: CommandGroup[] = [
   {
     name: "Faucet",
     description: "Get some testnet tokens.",
-    triggers: ["/faucet", "/networks"],
     commands: [
       {
         command: "/faucet [address] [network]",
         handler: handleFaucet,
+        triggers: ["/faucet"],
         description: "Get some testnet tokens.",
         params: {
           address: {
@@ -47,6 +48,7 @@ export const commands: CommandGroup[] = [
       },
       {
         command: "/networks",
+        triggers: ["/networks"],
         handler: handleFaucet,
         description: "Get the list of supported networks.",
         params: {},
@@ -56,10 +58,10 @@ export const commands: CommandGroup[] = [
   {
     name: "Notion",
     description: "Update your Notion prompt.",
-    triggers: ["/update"],
     commands: [
       {
         command: "/update",
+        triggers: ["/update"],
         handler: handleNotion,
         description: "Update your Notion prompt.",
         params: {},
