@@ -2,13 +2,13 @@ import { HandlerContext } from "@xmtp/message-kit";
 import { textGeneration } from "../lib/openai.js";
 import fs from "fs";
 import { SUPPORTED_NETWORKS } from "../lib/learnweb3.js";
+import { getUserInfo } from "../lib/resolver.js";
+import { processResponseWithSkill } from "../lib/openai.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import { responseParser } from "../lib/openai.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-let chatHistories: Record<string, any[]> = {};
 
 export async function handler(context: HandlerContext) {
   if (!process?.env?.OPEN_AI_API_KEY) {
@@ -21,52 +21,24 @@ export async function handler(context: HandlerContext) {
       content: { content, params },
       sender,
     },
-    group,
   } = context;
 
   try {
     let userPrompt = params?.prompt ?? content;
-
-    const { reply, history } = await textGeneration(
+    const userInfo = await getUserInfo(sender.address);
+    if (!userInfo) {
+      console.log("User info not found");
+      return;
+    }
+    const { reply } = await textGeneration(
+      sender.address,
       userPrompt,
-      await generateSystemPrompt(sender.address),
-      chatHistories[sender.address]
+      await generateSystemPrompt(sender.address)
     );
-    if (!group) chatHistories[sender.address] = history; // Update chat history for the user
-
-    await processResponseWithIntent(reply, context, sender.address);
+    await processResponseWithSkill(sender.address, reply, context);
   } catch (error) {
     console.error("Error during OpenAI call:", error);
-    await context.send("An error occurred while processing your request.");
-  }
-}
-
-async function processResponseWithIntent(
-  reply: string,
-  context: any,
-  senderAddress: string
-) {
-  let messages = reply
-    .split("\n")
-    .map((message: string) => responseParser(message))
-    .filter((message): message is string => message.length > 0);
-
-  for (const message of messages) {
-    if (message.startsWith("/")) {
-      const response = await context.intent(message);
-      if (response && response.message) {
-        let msg = responseParser(response.message);
-
-        chatHistories[senderAddress]?.push({
-          role: "system",
-          content: msg,
-        });
-
-        await context.send(response.message);
-      }
-    } else {
-      await context.send(message);
-    }
+    await context.reply("An error occurred while processing your request.");
   }
 }
 
@@ -78,8 +50,4 @@ async function generateSystemPrompt(sender: string) {
   page = page.replace("{ADDRESS}", sender);
   page = page.replace("{NETWORKS}", SUPPORTED_NETWORKS.join(", "));
   return page;
-}
-
-export async function clearChatHistory() {
-  chatHistories = {};
 }

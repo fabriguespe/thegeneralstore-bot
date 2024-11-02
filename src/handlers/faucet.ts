@@ -1,7 +1,7 @@
 import { HandlerContext } from "@xmtp/message-kit";
 import { getRedisClient } from "../lib/redis.js";
 import { FIVE_MINUTES, LearnWeb3Client, Network } from "../lib/learnweb3.js";
-import { clearChatHistory } from "./agent.js";
+import { clearChatHistories } from "../lib/openai.js";
 
 export async function handleFaucet(context: HandlerContext) {
   const { message } = context;
@@ -88,7 +88,7 @@ export async function handleFaucet(context: HandlerContext) {
         `❌ Sorry, there was an error processing your request:\n\n"${result.error!}"`
       );
       // Clear any in-memory cache or state related to the prompt
-      clearChatHistory();
+      clearChatHistories();
       return;
     }
 
@@ -104,7 +104,7 @@ export async function handleFaucet(context: HandlerContext) {
       }`
     );
     // Clear any in-memory cache or state related to the prompt
-    clearChatHistory();
+    clearChatHistories();
   } else {
     await context.send("Unknown command. Please use 'list' or 'drip'.");
   }

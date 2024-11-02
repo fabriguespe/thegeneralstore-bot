@@ -1,13 +1,13 @@
-import type { CommandGroup } from "@xmtp/message-kit";
+import type { SkillGroup } from "@xmtp/message-kit";
 import { handlePoap } from "./handlers/poap.js";
 import { handleFaucet } from "./handlers/faucet.js";
 import { handleNotion } from "./handlers/notion.js";
 
-export const commands: CommandGroup[] = [
+export const skills: SkillGroup[] = [
   {
     name: "Poap Bot",
     description: "Get your POAP.",
-    commands: [
+    skills: [
       {
         command: "/poap [address]",
         handler: handlePoap,
@@ -31,7 +31,7 @@ export const commands: CommandGroup[] = [
   {
     name: "Faucet",
     description: "Get some testnet tokens.",
-    commands: [
+    skills: [
       {
         command: "/faucet [address] [network]",
         handler: handleFaucet,
@@ -58,7 +58,7 @@ export const commands: CommandGroup[] = [
   {
     name: "Notion",
     description: "Update your Notion prompt.",
-    commands: [
+    skills: [
       {
         command: "/update",
         triggers: ["/update"],
