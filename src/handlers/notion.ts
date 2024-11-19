@@ -1,18 +1,17 @@
-import { HandlerContext } from "@xmtp/message-kit";
+import { XMTPContext } from "@xmtp/message-kit";
 import { downloadPage } from "../lib/notion.js";
 import fs from "fs";
 
-export async function handleNotion(context: HandlerContext) {
+export async function handleNotion(context: XMTPContext) {
   const {
     message: {
-      content: { content: text, command },
-      sender,
+      content: { skill },
     },
   } = context;
 
-  if (command === "update") {
+  if (skill === "update") {
     const page = await downloadPage();
-    fs.writeFileSync("src/data/notion_prompt.md", page);
+    fs.writeFileSync("src/prompt.md", page);
     await context.reply("Notion DB updated");
   }
 }

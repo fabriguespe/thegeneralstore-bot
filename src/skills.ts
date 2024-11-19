@@ -7,11 +7,12 @@ export const skills: SkillGroup[] = [
   {
     name: "Poap Bot",
     description: "Get your POAP.",
+    tag: "@store",
     skills: [
       {
-        command: "/poap [address]",
+        skill: "/poap [address]",
         handler: handlePoap,
-        triggers: ["/poap"],
+        examples: ["/poap 0x1234567890123456789012345678901234567890"],
         description: "Get your POAP.",
         params: {
           address: {
@@ -20,22 +21,18 @@ export const skills: SkillGroup[] = [
         },
       },
       {
-        command: "/poap list",
+        skill: "/list",
         handler: handlePoap,
-        triggers: ["/poap list"],
+        examples: ["/list"],
         description: "List all POAPs.",
         params: {},
       },
-    ],
-  },
-  {
-    name: "Faucet",
-    description: "Get some testnet tokens.",
-    skills: [
       {
-        command: "/faucet [address] [network]",
+        skill: "/faucet [address] [network]",
         handler: handleFaucet,
-        triggers: ["/faucet"],
+        examples: [
+          "/faucet 0x1234567890123456789012345678901234567890 sepolia",
+        ],
         description: "Get some testnet tokens.",
         params: {
           address: {
@@ -47,22 +44,16 @@ export const skills: SkillGroup[] = [
         },
       },
       {
-        command: "/networks",
-        triggers: ["/networks"],
+        skill: "/networks",
         handler: handleFaucet,
+        examples: ["/networks"],
         description: "Get the list of supported networks.",
         params: {},
       },
-    ],
-  },
-  {
-    name: "Notion",
-    description: "Update your Notion prompt.",
-    skills: [
       {
-        command: "/update",
-        triggers: ["/update"],
+        skill: "/update",
         handler: handleNotion,
+        examples: ["/update"],
         description: "Update your Notion prompt.",
         params: {},
       },

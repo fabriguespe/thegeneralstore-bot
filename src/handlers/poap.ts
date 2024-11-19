@@ -1,26 +1,22 @@
-import { HandlerContext, xmtpClient } from "@xmtp/message-kit";
+import { XMTPContext } from "@xmtp/message-kit";
 import { db } from "../lib/db.js";
 await db.read();
 
-export async function handlePoap(context: HandlerContext) {
-  //@ts-ignore
-  const { name } = context;
+export async function handlePoap(context: XMTPContext) {
   const {
     message: {
-      content: { content: text, command, params },
-      sender,
+      content: { skill, params },
     },
   } = context;
 
-  if (command == "poap" && text == "/poap list") {
+  if (skill == "list") {
     const poapTable = db?.data?.poaps;
     const claimed = poapTable.filter((poap) => poap.Address);
     return {
       code: 200,
       message: `You have claimed ${claimed.length} POAPs out of ${poapTable.length}`,
     };
-  } else if (command == "poap") {
-    // Destructure and validate parameters for the ens command
+  } else if (skill == "poap") {
     const { address } = params;
     await db.read();
     const poapTable = db?.data?.poaps;

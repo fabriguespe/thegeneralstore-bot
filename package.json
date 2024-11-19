@@ -1,21 +1,16 @@
 {
-  "name": "thegeneralstore-bot",
+  "name": "gm-xmtp",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc -w & sleep 1 && nodemon --quiet dist/index.js",
-    "dev:bun": "tsc -w & sleep 1 && bun run --watch dist/index.js",
+    "dev": "tsc -w & sleep 1 && node --watch dist/index.js",
     "start": "node dist/index.js"
   },
-  "devDependencies": {
-    "nodemon": "^3.1.0",
-    "typescript": "^5.4.3"
-  },
   "dependencies": {
+    "@xmtp/message-kit": "1.1.9-beta.3",
     "@notionhq/client": "^2.2.15",
     "@redis/client": "^1.6.0",
-    "@xmtp/message-kit": "^1.1.5-beta.11",
     "axios": "^1.7.7",
     "lowdb": "^7.0.1",
     "openai": "^4.67.2"

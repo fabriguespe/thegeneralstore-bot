@@ -1,13 +1,12 @@
-import { HandlerContext } from "@xmtp/message-kit";
+import { XMTPContext, clearMemory } from "@xmtp/message-kit";
 import { getRedisClient } from "../lib/redis.js";
 import { FIVE_MINUTES, LearnWeb3Client, Network } from "../lib/learnweb3.js";
-import { clearChatHistories } from "../lib/openai.js";
 
-export async function handleFaucet(context: HandlerContext) {
+export async function handleFaucet(context: XMTPContext) {
   const { message } = context;
   const redisClient = await getRedisClient();
   const {
-    content: { command, params },
+    content: { skill, params },
     sender,
   } = message;
 
@@ -23,7 +22,7 @@ export async function handleFaucet(context: HandlerContext) {
     cachedSupportedNetworksData!
   ).supportedNetworks;
 
-  if (command === "networks") {
+  if (skill === "networks") {
     if (
       !cachedSupportedNetworksData ||
       Date.now() >
@@ -63,7 +62,7 @@ export async function handleFaucet(context: HandlerContext) {
       message: `Available networks:\n\n${networkList.join("\n")}`,
       code: 200,
     };
-  } else if (command === "faucet") {
+  } else if (skill === "faucet") {
     const { network } = params;
     const selectedNetwork = supportedNetworks.find(
       (n) => n.networkId === network
@@ -88,7 +87,7 @@ export async function handleFaucet(context: HandlerContext) {
         `❌ Sorry, there was an error processing your request:\n\n"${result.error!}"`
       );
       // Clear any in-memory cache or state related to the prompt
-      clearChatHistories();
+      clearMemory();
       return;
     }
 
@@ -104,8 +103,8 @@ export async function handleFaucet(context: HandlerContext) {
       }`
     );
     // Clear any in-memory cache or state related to the prompt
-    clearChatHistories();
+    clearMemory();
   } else {
-    await context.send("Unknown command. Please use 'list' or 'drip'.");
+    await context.send("Unknown skill. Please use 'list' or 'drip'.");
   }
 }

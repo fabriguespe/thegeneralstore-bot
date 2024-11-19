@@ -1,31 +1,34 @@
-import { run, HandlerContext } from "@xmtp/message-kit";
-import { handler as agent } from "./handlers/agent.js";
-import { handleNotion } from "./handlers/notion.js";
+import {
+  agentReply,
+  XMTPContext,
+  replaceVariables,
+  run,
+} from "@xmtp/message-kit";
 import { downloadPage } from "./lib/notion.js";
-import { handlePoap } from "./handlers/poap.js";
-import { clearChatHistories } from "./lib/openai.js";
 import fs from "fs";
 
 setupFiles();
-run(async (context: HandlerContext) => {
-  const {
-    typeId,
-    content: { content: text },
-  } = context.message;
 
-  if (typeId === "text") {
-    console.log(text);
-    if (text.startsWith("/update")) {
-      await handleNotion(context);
-      clearChatHistories();
-      return;
-    } else if (text.startsWith("/poap list")) {
-      await handlePoap(context);
-      return;
-    } else await agent(context);
-  }
+run(async (context: XMTPContext) => {
+  const {
+    message: { sender },
+    skills,
+  } = context;
+  let systemPrompt = await getPrompt();
+  let prompt = await replaceVariables(
+    systemPrompt,
+    sender.address,
+    skills,
+    "@bot"
+  );
+  await agentReply(context, prompt);
 });
 
+async function getPrompt() {
+  if (fs.existsSync(".data/prompt.md"))
+    return fs.readFileSync(".data/prompt.md", "utf8");
+  else return fs.readFileSync("src/prompt.md", "utf8");
+}
 async function setupFiles() {
   if (!fs.existsSync(".data/db.json")) {
     const dbfile = fs.readFileSync("src/data/db.json", "utf8");
@@ -34,6 +37,6 @@ async function setupFiles() {
   }
 
   const page = await downloadPage();
-  fs.writeFileSync("src/data/notion_prompt.md", page);
+  fs.writeFileSync("src/prompt.md", page);
   console.log("Notion DB updated");
 }
