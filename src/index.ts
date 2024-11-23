@@ -12,15 +12,10 @@ setupFiles();
 run(async (context: XMTPContext) => {
   const {
     message: { sender },
-    skills,
+    agent,
   } = context;
   let systemPrompt = await getPrompt();
-  let prompt = await replaceVariables(
-    systemPrompt,
-    sender.address,
-    skills,
-    "@bot"
-  );
+  let prompt = await replaceVariables(systemPrompt, sender.address, agent);
   await agentReply(context, prompt);
 });
 
