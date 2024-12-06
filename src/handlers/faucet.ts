@@ -1,6 +1,10 @@
 import { XMTPContext, clearMemory } from "@xmtp/message-kit";
-import { getRedisClient } from "../lib/redis.js";
-import { FIVE_MINUTES, LearnWeb3Client, Network } from "../lib/learnweb3.js";
+import { getRedisClient } from "../plugins/redis.js";
+import {
+  FIVE_MINUTES,
+  LearnWeb3Client,
+  Network,
+} from "../plugins/learnweb3.js";
 
 export async function handleFaucet(context: XMTPContext) {
   const { message } = context;

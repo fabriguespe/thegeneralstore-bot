@@ -1,5 +1,5 @@
 import { XMTPContext } from "@xmtp/message-kit";
-import { downloadPage } from "../lib/notion.js";
+import { downloadPage } from "../plugins/notion.js";
 import fs from "fs";
 
 export async function handleNotion(context: XMTPContext) {
