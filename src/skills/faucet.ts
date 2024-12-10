@@ -1,10 +1,33 @@
-import { XMTPContext, clearMemory } from "@xmtp/message-kit";
+import { Skill, XMTPContext, clearMemory } from "@xmtp/message-kit";
 import { getRedisClient } from "../plugins/redis.js";
 import {
   FIVE_MINUTES,
   LearnWeb3Client,
   Network,
 } from "../plugins/learnweb3.js";
+
+export const faucet: Skill[] = [
+  {
+    skill: "faucet",
+    handler: handleFaucet,
+    examples: ["/faucet 0x1234567890123456789012345678901234567890 sepolia"],
+    description: "Get some testnet tokens.",
+    params: {
+      address: {
+        type: "string",
+      },
+      network: {
+        type: "string",
+      },
+    },
+  },
+  {
+    skill: "/networks",
+    handler: handleFaucet,
+    examples: ["/networks"],
+    description: "Get the list of supported networks.",
+  },
+];
 
 export async function handleFaucet(context: XMTPContext) {
   const { message } = context;

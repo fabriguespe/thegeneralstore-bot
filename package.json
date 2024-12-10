@@ -8,12 +8,11 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@xmtp/message-kit": "1.2.14",
+    "@xmtp/message-kit": "1.2.24",
     "@notionhq/client": "^2.2.15",
     "@redis/client": "^1.6.0",
     "axios": "^1.7.7",
-    "lowdb": "^7.0.1",
-    "openai": "^4.67.2"
+    "lowdb": "^7.0.1"
   },
   "engines": {
     "node": ">=20"

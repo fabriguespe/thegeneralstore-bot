@@ -2,22 +2,31 @@ import {
   agentReply,
   XMTPContext,
   replaceVariables,
+  Agent,
   run,
 } from "@xmtp/message-kit";
 import { downloadPage } from "./plugins/notion.js";
 import fs from "fs";
+import { faucet } from "./skills/faucet.js";
+import { notion } from "./skills/notion.js";
+import { poap } from "./skills/poap.js";
 
 setupFiles();
-
-run(async (context: XMTPContext) => {
-  const {
-    message: { sender },
-    agent,
-  } = context;
-  let systemPrompt = await getPrompt();
-  let prompt = await replaceVariables(systemPrompt, sender.address, agent);
-  await agentReply(context, prompt);
-});
+const agent: Agent = {
+  name: "Poap Bot",
+  description: "Get your POAP.",
+  tag: "@store",
+  skills: [faucet, notion, poap],
+  onMessage: async (context: XMTPContext) => {
+    const {
+      message: { sender },
+    } = context;
+    let systemPrompt = await getPrompt();
+    let prompt = await replaceVariables(systemPrompt, sender.address, agent);
+    await agentReply(context, prompt);
+  },
+};
+run(agent);
 
 async function getPrompt() {
   if (fs.existsSync(".data/prompt.md"))
@@ -25,6 +34,9 @@ async function getPrompt() {
   else return fs.readFileSync("src/prompt.md", "utf8");
 }
 async function setupFiles() {
+  if (!fs.existsSync(".data")) {
+    fs.mkdirSync(".data");
+  }
   if (!fs.existsSync(".data/db.json")) {
     const dbfile = fs.readFileSync("src/data/db.json", "utf8");
     fs.writeFileSync(".data/db.json", dbfile);

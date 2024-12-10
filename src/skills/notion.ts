@@ -1,6 +1,15 @@
-import { XMTPContext } from "@xmtp/message-kit";
+import { Skill, XMTPContext } from "@xmtp/message-kit";
 import { downloadPage } from "../plugins/notion.js";
 import fs from "fs";
+
+export const notion: Skill[] = [
+  {
+    skill: "update",
+    handler: handleNotion,
+    examples: ["/update"],
+    description: "Update your Notion prompt.",
+  },
+];
 
 export async function handleNotion(context: XMTPContext) {
   const {

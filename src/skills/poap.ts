@@ -1,6 +1,25 @@
-import { XMTPContext } from "@xmtp/message-kit";
+import { Skill, XMTPContext } from "@xmtp/message-kit";
 import { db } from "../plugins/db.js";
-await db.read();
+
+export const poap: Skill[] = [
+  {
+    skill: "poap",
+    handler: handlePoap,
+    examples: ["/poap 0x1234567890123456789012345678901234567890"],
+    description: "Get your POAP.",
+    params: {
+      address: {
+        type: "string",
+      },
+    },
+  },
+  {
+    skill: "/list",
+    handler: handlePoap,
+    examples: ["/list"],
+    description: "List all POAPs.",
+  },
+];
 
 export async function handlePoap(context: XMTPContext) {
   const {
@@ -8,6 +27,7 @@ export async function handlePoap(context: XMTPContext) {
       content: { skill, params },
     },
   } = context;
+  await db.read();
 
   if (skill == "list") {
     const poapTable = db?.data?.poaps;
