@@ -1,4 +1,4 @@
-import { Skill, XMTPContext } from "@xmtp/message-kit";
+import { Skill, Context } from "@xmtp/message-kit";
 import { db } from "../plugins/db.js";
 
 export const poap: Skill[] = [
@@ -21,7 +21,7 @@ export const poap: Skill[] = [
   },
 ];
 
-export async function handlePoap(context: XMTPContext) {
+export async function handlePoap(context: Context) {
   const {
     message: {
       content: { skill, params },

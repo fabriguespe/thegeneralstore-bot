@@ -1,4 +1,4 @@
-import { Skill, XMTPContext } from "@xmtp/message-kit";
+import { Skill, Context } from "@xmtp/message-kit";
 import { downloadPage } from "../plugins/notion.js";
 import fs from "fs";
 
@@ -11,7 +11,7 @@ export const notion: Skill[] = [
   },
 ];
 
-export async function handleNotion(context: XMTPContext) {
+export async function handleNotion(context: Context) {
   const {
     message: {
       content: { skill },

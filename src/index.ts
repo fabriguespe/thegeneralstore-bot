@@ -1,10 +1,4 @@
-import {
-  agentReply,
-  XMTPContext,
-  replaceVariables,
-  Agent,
-  run,
-} from "@xmtp/message-kit";
+import { Agent, run } from "@xmtp/message-kit";
 import { downloadPage } from "./plugins/notion.js";
 import fs from "fs";
 import { faucet } from "./skills/faucet.js";
@@ -17,14 +11,7 @@ const agent: Agent = {
   description: "Get your POAP.",
   tag: "@store",
   skills: [faucet, notion, poap],
-  onMessage: async (context: XMTPContext) => {
-    const {
-      message: { sender },
-    } = context;
-    let systemPrompt = await getPrompt();
-    let prompt = await replaceVariables(systemPrompt, sender.address, agent);
-    await agentReply(context, prompt);
-  },
+  systemPrompt: await getPrompt(),
 };
 run(agent);
 
